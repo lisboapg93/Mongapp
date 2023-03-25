@@ -4,12 +4,10 @@ import com.example.mong.model.Produto;
 import com.example.mong.repositorio.RepositorioProduto;
 import com.example.mong.resource.RequisicaoProduto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ControleProduto {
@@ -35,5 +33,19 @@ public class ControleProduto {
         produto.setDescricao(requisicaoProduto.getDescricao());
 
         return ResponseEntity.status(201).body(this.repositorioProduto.save(produto));
+    }
+
+    @GetMapping("/produto/{id}")
+    public ResponseEntity getAllProducts(@PathVariable String id){
+
+        Optional <Produto> produto = this.repositorioProduto.findById(id);
+
+        if (produto.isPresent()){
+            return ResponseEntity.ok(produto.get());
+        }else{
+            return ResponseEntity.ok("O produto com id: " + id + "não foi encontrado!");
+        }
+
+        return ResponseEntity.ok(this.repositorioProduto.findAll());
     }
 }

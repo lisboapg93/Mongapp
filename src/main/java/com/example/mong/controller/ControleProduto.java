@@ -36,7 +36,7 @@ public class ControleProduto {
     }
 
     @GetMapping("/produto/{id}")
-    public ResponseEntity getAllProducts(@PathVariable String id){
+    public ResponseEntity getAllProductsById(@PathVariable String id){
 
         Optional <Produto> produto = this.repositorioProduto.findById(id);
 
@@ -45,7 +45,18 @@ public class ControleProduto {
         }else{
             return ResponseEntity.ok("O produto com id: " + id + "não foi encontrado!");
         }
+    }
 
-        return ResponseEntity.ok(this.repositorioProduto.findAll());
+    @DeleteMapping("/produto/{id}")
+    public ResponseEntity deleteProducts(@PathVariable String id) {
+
+        Optional<Produto> produto = this.repositorioProduto.findById(id);
+
+        if (produto.isPresent()) {
+            this.repositorioProduto.deleteById(id);
+            return ResponseEntity.ok("Deletado com sucesso");
+        } else {
+            return ResponseEntity.ok("O produto com id: " + id + "não foi encontrado!");
+        }
     }
 }
